@@ -1,0 +1,23 @@
+<h1>What improvement do you want to make to your house?</h1>
+
+<%= form_for @project do |f| %>
+  <% if @project.errors.any? %>
+    <div class="error_messages">
+      <h2><%= pluralize(@project.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <ul>
+      <% @project.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :selected_addition %><br />
+    <%= f.check_box :selected_addition %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Next Step" %>
+  </div>  
+<% end %>
