@@ -4,7 +4,11 @@ module ProjectParams
     :name, 
 
     # --Virtual Attributes--
-    :selected_addition
+    :selected_addition, 
+    general_repair_permit_attributes: [ :id,
+                                        :addition,
+                                        :work_summary,
+                                        :project_id]
 
     )
  end

@@ -19,7 +19,16 @@ enter_details
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>
+
+    <%= f.fields_for :general_repair_permit do |ff| %>
+      <div>
+        <%= ff.label :work_summary %>
+        <%= ff.text_area :work_summary %>
+      </div>
+    <% end %>
   </div>
+
+
   <div class="actions">
     <%= f.submit "Next Step" %>
   </div>  
