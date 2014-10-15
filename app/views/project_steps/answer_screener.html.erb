@@ -1,9 +1,28 @@
 answer_screener
+<%= form_for @project, url: wizard_path do |f| %>
+  <% if @project.errors.any? %>
+    <div class="error_messages">
+      <h2><%= pluralize(@project.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <ul>
+      <% @project.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
 
+  <% if @project.selected_addition %>
+    <div class="radio">
+      <%= f.radio_button :addition_size, 'lt1000' %>
+      <%= f.label :addition_size, "< 1000", value: 'lt1000' %>
+    </div>
+    <div class="radio">
+      <%= f.radio_button :addition_size, 'gte1000' %>
+      <%= f.label :addition_size, ">= 1000", value: 'gte1000' %>
+    </div>
+  <% end %>
 
-<% if @project.selected_addition %>
-  Project will have addition
+  <div class="actions">
+    <%= f.submit "Next Step" %>
+  </div>  
 <% end %>
-
-
-<%= link_to "next step", next_wizard_path %>
