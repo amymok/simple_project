@@ -10,9 +10,6 @@ class ProjectsController < ApplicationController
     @project = Project.new(project_params)
     if @project.save
       session[:project_id] = @project.id
-      
-      session[:selected_addition] = @project.selected_addition
-
 
       redirect_to project_steps_path
     else

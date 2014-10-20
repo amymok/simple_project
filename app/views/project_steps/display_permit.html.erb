@@ -3,6 +3,6 @@ display_permit
 <% if @project.selected_addition %>
   Project will have addition
 <% end %>
-
+<%= @permit_needs.to_s %>
 
 <%= link_to "next step", next_wizard_path %>
