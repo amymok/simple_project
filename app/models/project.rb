@@ -9,6 +9,49 @@ class Project < ActiveRecord::Base
   # end
 #:required_permits=>{:general_repair_permit=>{:selected_addition=>true}}
 
+
+
+  # # Input: {addition => true, door => true}, true
+  # # Output: {}
+
+  # def self.get_subproject_to_permits(required_permits, permit_needed)
+  #   response = {}
+  #   permit_needed.each do | subproject |
+  #       response[subproject] = []
+  #     required_permits.each do | permit, subproject_pair |
+  #       response[subproject].push(permit)
+  #     end
+  #   end
+  # end
+
+  # Output: {general_repair_permit => {addition => true, door => true}, historical_form => {addition => true, door => false}}
+  def get_require_permits_for_subprojects
+    response = {}
+    response[:general_repair_permit] = GeneralRepairPermit.is_needed?(self)
+    # Add more forms and permits here
+    # response[:name_of_permit] = PermitClass.is_needed?(self)
+
+    return response
+  end 
+
+  # Input:  {general_repair_permit => {addition => true, door => true}, historical_form => {addition => true, door => false}}, true
+  # Output: [addition, door]
+  # Input:  {general_repair_permit => {addition => true, door => true}, historical_form => {addition => true, door => false}}, false
+  # Output: [door]
+  def self.get_subprojects_permit_needed(required_permits, permit_needed_check)
+    response = []
+    required_permits.each do | permit, subproject_pair |
+      subproject_pair.each do | subproject, permit_needed |
+        if permit_needed == permit_needed_check
+          response.push(subproject)
+        end
+      end
+    end
+    return response.uniq
+  end
+
+  # Input: {general_repair_permit => {addition => true, door => true}, historical_form => {addition => true, door => false}}
+  # Output: { general_repair_permit => {addition, door}, historical_form => {addition}}
   def self.get_permits_to_subprojects(required_permits)
     response = {}
     required_permits.each do | permit, subproject_pair |
@@ -24,39 +67,11 @@ class Project < ActiveRecord::Base
     return response
   end
 
-  def self.get_subproject_to_permits(required_permits, permit_needed)
-    response = {}
-    permit_needed.each do | subproject |
-        response[subproject] = []
-      required_permits.each do | permit, subproject_pair |
-        response[subproject].push(permit)
-      end
-    end
-  end
-
-  def get_require_permits_for_subprojects
-    response = {}
-    response[:general_repair_permit] = GeneralRepairPermit.is_needed?(self)
-
-    return response
-  end 
-
-  # Take in output from get_require_permits_for_subprojects
-  def self.get_subprojects_permit_needed(required_permits, permit_needed_check)
-    response = []
-    required_permits.each do | permit, subproject_pair |
-      subproject_pair.each do | subproject, permit_needed |
-        if permit_needed == permit_needed_check
-          response.push(subproject)
-        end
-      end
-    end
-    return response.uniq
-  end
-
   def get_permit_needed_info
     response = {}
     response[:required_permits] = get_require_permits_for_subprojects
+    # @TODO: May need to manipulate if something in permit_needed, should it be in not_permit, what about if
+    # something needs further assistance, do I still apply for permit?
     response[:permit_needed] = self.class.get_subprojects_permit_needed(response[:required_permits], true)
     response[:permit_not_needed] = self.class.get_subprojects_permit_needed(response[:required_permits], false)
     response[:further_assistance_needed] = self.class.get_subprojects_permit_needed(response[:required_permits], nil)
