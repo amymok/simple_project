@@ -26,6 +26,13 @@ enter_details
         <%= ff.text_area :work_summary %>
       </div>
     <% end %>
+
+    <%= f.fields_for :historical_cert_appropriateness do |fff| %>
+      <div>
+        <%= fff.label :work_summary %>
+        <%= fff.text_area :work_summary %>
+      </div>
+    <% end %>
   </div>
 
 

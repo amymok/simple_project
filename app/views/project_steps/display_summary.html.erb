@@ -1,7 +1,21 @@
 display_summary<br>
 
+project:<br>
+id: <%= @project.id %><br>
 selected_addition: <%= @project.selected_addition %><br>
 addition_size: <%= @project.addition_size %><br>
-name: <%= @project.name %><br>
-addition: <%= @project.general_repair_permit.addition %><br>
-work_summary: <%= @project.general_repair_permit.work_summary %>
+name: <%= @project.name %><br><br>
+<% if @project.general_repair_permit %>
+  general repair permit: <br>
+  id: <%= @project.general_repair_permit.id %><br>
+  addition: <%= @project.general_repair_permit.addition %><br>
+  work_summary: <%= @project.general_repair_permit.work_summary %><br>
+  project_id: <%= @project.general_repair_permit.project_id %><br><br>
+<% end %>
+<% if @project.historical_cert_appropriateness %>
+  historical cert appropriateness:<br>
+  id: <%= @project.historical_cert_appropriateness.id %><br>
+  addition: <%= @project.historical_cert_appropriateness.addition %><br>
+  work_summary: <%= @project.historical_cert_appropriateness.work_summary %><br>
+  project_id: <%= @project.historical_cert_appropriateness.project_id %><br><br>
+<% end %>

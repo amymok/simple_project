@@ -21,7 +21,24 @@ class ProjectStepsController < ApplicationController
       # @subjprojects_permit_needed = Project.get_subprojects_permit_needed(@permit_needs)
       # @subjprojects_permit_not_needed = Project.get_subprojects_permit_not_needed(@permit_needs)
       # @subjprojects_further_assistance_needed = Project.get_subprojects_further_assistance_needed(@permit_needs)
+
+    when :enter_details
+      @project.create_needed_permits
+      
+      # grp = GeneralRepairPermit.is_needed?(@project)
+      # puts "***********grp: #{grp}**********"
+      # if grp
+      #   @project.general_repair_permit ||= GeneralRepairPermit.new
+      # end
+
+      # hca = HistoricalCertAppropriateness.is_needed?(@project)
+      # puts "************hca: #{hca}***********"
+      # if hca
+      #   @project.historical_cert_appropriateness ||= HistoricalCertAppropriateness.new
+      # end
     end
+
+
     render_wizard
   end
 

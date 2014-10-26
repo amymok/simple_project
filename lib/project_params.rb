@@ -7,7 +7,11 @@ module ProjectParams
     general_repair_permit_attributes: [ :id,
                                         :addition,
                                         :work_summary,
-                                        :project_id]
+                                        :project_id],
+    historical_cert_appropriateness_attributes: [ :id,
+                                                  :addition,
+                                                  :work_summary,
+                                                  :project_id]
 
     )
  end

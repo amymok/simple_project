@@ -1,11 +1,12 @@
-class GeneralRepairPermit < ActiveRecord::Base
+class HistoricalCertAppropriateness < ActiveRecord::Base
   belongs_to :project
 
   def self.addition_permit_needed?(project)
-    if project.addition_size.eql?("lt1000")# && addition_num_story.eql?("1Story")
+    # check whenever there's an addition 
+    if project.selected_addition # && addition_num_story.eql?("1Story")
       return true
     else
-      return nil
+      return false
     end
   end
 

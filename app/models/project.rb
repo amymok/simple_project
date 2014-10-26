@@ -1,6 +1,10 @@
 class Project < ActiveRecord::Base
   has_one :general_repair_permit
+  has_one :historical_cert_appropriateness
   accepts_nested_attributes_for :general_repair_permit
+  accepts_nested_attributes_for :historical_cert_appropriateness
+  # Add more forms and permits here
+  # accepts_nested_attributes_for :permit_name
 
   # def get_require_permits_for_subprojects(selected_subproject, )
   #   if selected_subproject
@@ -24,10 +28,35 @@ class Project < ActiveRecord::Base
   #   end
   # end
 
+  def create_needed_permits
+
+    if GeneralRepairPermit.is_needed?(self)
+      self.general_repair_permit ||= GeneralRepairPermit.new
+      if GeneralRepairPermit.addition_permit_needed?(self)
+        update_attributes(general_repair_permit_attributes: {addition: true})
+      end
+
+      # Add more subproject check
+    end
+
+    if HistoricalCertAppropriateness.is_needed?(self)
+      self.historical_cert_appropriateness ||= HistoricalCertAppropriateness.new
+      if HistoricalCertAppropriateness.addition_permit_needed?(self)
+        update_attributes(historical_cert_appropriateness_attributes: {addition: true})
+      end
+
+      # Add more subproject check
+    end
+
+    # Add more permits
+    
+  end
+
   # Output: {general_repair_permit => {addition => true, door => true}, historical_form => {addition => true, door => false}}
   def get_require_permits_for_subprojects
     response = {}
-    response[:general_repair_permit] = GeneralRepairPermit.is_needed?(self)
+    response[:general_repair_permit] = GeneralRepairPermit.subprojects_needs(self)
+    response[:historical_cert_appropriateness] = HistoricalCertAppropriateness.subprojects_needs(self)
     # Add more forms and permits here
     # response[:name_of_permit] = PermitClass.is_needed?(self)
 
