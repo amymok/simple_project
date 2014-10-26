@@ -3,6 +3,14 @@ class Project < ActiveRecord::Base
   has_one :historical_cert_appropriateness
   accepts_nested_attributes_for :general_repair_permit
   accepts_nested_attributes_for :historical_cert_appropriateness
+
+  # Addition Section
+  validates_presence_of :addition_size, :if => :only_if_screener_addition?
+
+  def only_if_screener_addition?
+    status.to_s.include?('answer_screener') && selected_addition
+  end
+
   # Add more forms and permits here
   # accepts_nested_attributes_for :permit_name
 
@@ -49,7 +57,7 @@ class Project < ActiveRecord::Base
     end
 
     # Add more permits
-    
+
   end
 
   # Output: {general_repair_permit => {addition => true, door => true}, historical_form => {addition => true, door => false}}

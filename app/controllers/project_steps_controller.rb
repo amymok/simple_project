@@ -24,7 +24,7 @@ class ProjectStepsController < ApplicationController
 
     when :enter_details
       @project.create_needed_permits
-      
+
       # grp = GeneralRepairPermit.is_needed?(@project)
       # puts "***********grp: #{grp}**********"
       # if grp
@@ -44,6 +44,14 @@ class ProjectStepsController < ApplicationController
 
   def update
     @project = current_project
+
+    # Update status so model can perform validation accordingly
+    if params[:project] == nil
+      params[:project] = {}
+    end
+    puts "****************params[:project][:status] = #{params[:project][:status]}******************"
+    params[:project][:status] = step.to_s
+
     @project.update_attributes(project_params)
     if @project.errors.any?
       # render the same step

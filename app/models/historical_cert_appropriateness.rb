@@ -1,6 +1,13 @@
 class HistoricalCertAppropriateness < ActiveRecord::Base
   belongs_to :project
 
+  validates_presence_of :work_summary, :if => :only_if_is_needed_enter_details?
+  
+  def only_if_is_needed_enter_details?
+    project = Project.find_by_id(project_id)
+    project && project.status && project.status.to_s.include?('enter_details') && self.class.is_needed?(project)
+  end
+
   def self.addition_permit_needed?(project)
     # check whenever there's an addition 
     if project.selected_addition # && addition_num_story.eql?("1Story")
