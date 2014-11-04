@@ -11,31 +11,10 @@ class ProjectStepsController < ApplicationController
     case step
     when :display_permit
       @permit_needs = @project.get_permit_needed_info
-      # if @project.selected_addition
-      #   @project.update(:general_repair_permit_attributes => {:addition => @project.selected_addition})
-      # end
-
-      # should have some indicators on how to display permit info and which one needs which permits
-      # can we check which relationship is there?
-      # @permit_needs = @project.get_require_permits_for_subprojects
-      # @subjprojects_permit_needed = Project.get_subprojects_permit_needed(@permit_needs)
-      # @subjprojects_permit_not_needed = Project.get_subprojects_permit_not_needed(@permit_needs)
-      # @subjprojects_further_assistance_needed = Project.get_subprojects_further_assistance_needed(@permit_needs)
 
     when :enter_details
       @project.create_needed_permits
 
-      # grp = GeneralRepairPermit.is_needed?(@project)
-      # puts "***********grp: #{grp}**********"
-      # if grp
-      #   @project.general_repair_permit ||= GeneralRepairPermit.new
-      # end
-
-      # hca = HistoricalCertAppropriateness.is_needed?(@project)
-      # puts "************hca: #{hca}***********"
-      # if hca
-      #   @project.historical_cert_appropriateness ||= HistoricalCertAppropriateness.new
-      # end
     end
 
 
@@ -49,13 +28,10 @@ class ProjectStepsController < ApplicationController
     if params[:project] == nil
       params[:project] = {}
     end
-    puts "****************params[:project][:status] = #{params[:project][:status]}******************"
     params[:project][:status] = step.to_s
 
     @project.update_attributes(project_params)
     if @project.errors.any?
-      # render the same step
-      # @TODO: What does this mean?
       render_wizard
     else
       # render the next step

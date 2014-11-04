@@ -5,36 +5,16 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :historical_cert_appropriateness
 
   # Addition Section
+  validates_presence_of :name, :if => :active_or_details?
   validates_presence_of :addition_size, :if => :only_if_screener_addition?
+
+  def active_or_details?
+    status.to_s.include?('enter_details') || status.to_s.include?('active')
+  end
 
   def only_if_screener_addition?
     status.to_s.include?('answer_screener') && selected_addition
   end
-
-  # Add more forms and permits here
-  # accepts_nested_attributes_for :permit_name
-
-  # def get_require_permits_for_subprojects(selected_subproject, )
-  #   if selected_subproject
-  #     GeneralRepairPermit.is_permit_needed(selected_subproject, )
-
-  # end
-#:required_permits=>{:general_repair_permit=>{:selected_addition=>true}}
-
-
-
-  # # Input: {addition => true, door => true}, true
-  # # Output: {}
-
-  # def self.get_subproject_to_permits(required_permits, permit_needed)
-  #   response = {}
-  #   permit_needed.each do | subproject |
-  #       response[subproject] = []
-  #     required_permits.each do | permit, subproject_pair |
-  #       response[subproject].push(permit)
-  #     end
-  #   end
-  # end
 
   def create_needed_permits
 
@@ -121,43 +101,4 @@ class Project < ActiveRecord::Base
 
   end
 
-      # @permit_needs = @project.get_require_permits_for_subprojects
-      # @subjprojects_permit_needed = Project.get_subprojects_permit_needed(@permit_needs)
-      # @subjprojects_permit_not_needed = Project.get_subprojects_permit_not_needed(@permit_needs)
-      # @subjprojects_further_assistance_needed = Project.get_subprojects_further_assistance_needed(@permit_needs)
 end
-
-
-
-  # def update_permit_needs(selected_proj, displayed_proj_text, attribute, is_permit_needed, permit_needs)
-  #   if to_bool(selected_proj)
-  #     is_needed = is_permit_needed.call
-  #     if is_needed
-  #       permit_needs["permit_needed"].push(displayed_proj_text)
-  #       update_attribute(attribute, true)
-  #     elsif is_needed == false
-  #       permit_needs["permit_not_needed"].push(displayed_proj_text)
-  #       update_attribute(attribute, false)
-  #     else
-  #       permit_needs["further_assistance_needed"].push(displayed_proj_text)
-  #       update_attribute(attribute, nil)
-  #     end
-  #   end
-  # end
-
-  # def update_permit_needs_for_projects
-  #   permit_needs = { "permit_needed" => [], "permit_not_needed" => [], "further_assistance_needed" => [] }
-
-  #   update_permit_needs(selected_addition, "Addition", "addition", method(:addition_permit_needed?), permit_needs)
-  #   update_permit_needs(selected_acs_struct, "Shed/Garage", "acs_struct", method(:acs_struct_permit_needed?), permit_needs)
-  #   update_permit_needs(selected_deck, "Deck", "deck", method(:deck_permit_needed?), permit_needs)
-  #   update_permit_needs(selected_pool, "Swimming Pool", "pool", method(:pool_permit_needed?), permit_needs)
-  #   update_permit_needs(selected_cover, "Carport/Outdoor Cover", "cover", method(:cover_permit_needed?), permit_needs)
-  #   update_permit_needs(selected_window, "Windows", "window", method(:window_permit_needed?), permit_needs)
-  #   update_permit_needs(selected_door, "Doors", "door", method(:door_permit_needed?), permit_needs)
-  #   update_permit_needs(selected_wall, "Walls", "wall", method(:wall_permit_needed?), permit_needs)
-  #   update_permit_needs(selected_siding, "Replace Siding", "siding", method(:siding_permit_needed?), permit_needs)
-  #   update_permit_needs(selected_floor, "Floors", "floor", method(:floor_permit_needed?), permit_needs)
-
-  #   return permit_needs
-  # end

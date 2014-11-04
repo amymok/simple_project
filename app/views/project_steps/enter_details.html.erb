@@ -1,11 +1,11 @@
 enter_details
 
 <%= form_for @project, url: wizard_path do |f| %>
-  <% if @project.errors.any? %>
+  <% if f.object.errors.any? %>
     <div class="error_messages">
-      <h2><%= pluralize(@project.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <h2><%= pluralize(f.object.errors.count, "error") %> prohibited this user from being saved:</h2>
       <ul>
-      <% @project.errors.full_messages.each do |msg| %>
+      <% f.object.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>
@@ -20,13 +20,17 @@ enter_details
     <%= f.label :name %><br />
     <%= f.text_field :name %>
 
+
     <%= f.fields_for :general_repair_permit do |ff| %>
+      <% if @project.general_repair_permit.addition %>
+        Addition is true
+      <% end %>
       <div>
         <%= ff.label :work_summary %>
         <%= ff.text_area :work_summary %>
       </div>
-    <% end %>
 
+    <% end %>
     <%= f.fields_for :historical_cert_appropriateness do |fff| %>
       <div>
         <%= fff.label :work_summary %>
