@@ -5,7 +5,8 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+~~The best places to have lunch.~~
+
 
 * System dependencies
 
