@@ -1,11 +1,25 @@
 class GeneralRepairPermit < ActiveRecord::Base
   belongs_to :project
 
+  attr_accessor :project_status_to_be_saved
+
   validates_presence_of :work_summary, :if => :only_if_is_needed_enter_details?
+
 
   def only_if_is_needed_enter_details?
     project = Project.find_by_id(project_id)
-    project && project.status && project.status.to_s.include?('enter_details') && self.class.is_needed?(project)
+    puts "^^^^^^project && project.status && project.status.to_s.include?('enter_details') && self.class.is_needed?(project): #{project && project.status && project.status.to_s.include?('enter_details') && self.class.is_needed?(project)}"
+    puts "project = #{project}"
+    if project
+      puts "project.status = #{project.status}"
+      if project.status
+        puts "project_status_to_be_saved.to_s.include?('enter_details') = #{project_status_to_be_saved.to_s.include?('enter_details')}"
+        if project.status.to_s.include?('enter_details') 
+          puts "self.class.is_needed?(project) = #{self.class.is_needed?(project)}"
+        end
+      end
+    end
+    project && project.status && project_status_to_be_saved.to_s.include?('enter_details') && self.class.is_needed?(project)
   end
 
   def self.addition_permit_needed?(project)

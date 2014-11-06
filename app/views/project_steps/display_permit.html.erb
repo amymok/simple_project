@@ -1,8 +1,14 @@
 display_permit
 
+<%= form_for @project, url: wizard_path do |f| %>
+
 <% if @project.selected_addition %>
   Project will have addition
 <% end %>
 <%= @permit_needs.to_s %>
 
-<%= link_to "next step", next_wizard_path %>
+<%#= link_to "next step", next_wizard_path %>
+  <div class="actions">
+    <%= f.submit "Next Step" %>
+  </div>  
+<% end %>

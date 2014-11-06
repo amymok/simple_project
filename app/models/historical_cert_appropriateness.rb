@@ -1,11 +1,13 @@
 class HistoricalCertAppropriateness < ActiveRecord::Base
   belongs_to :project
 
+  attr_accessor :project_status_to_be_saved
+  
   validates_presence_of :work_summary, :if => :only_if_is_needed_enter_details?
   
   def only_if_is_needed_enter_details?
     project = Project.find_by_id(project_id)
-    project && project.status && project.status.to_s.include?('enter_details') && self.class.is_needed?(project)
+    project && project.status && project_status_to_be_saved.to_s.include?('enter_details') && self.class.is_needed?(project)
   end
 
   def self.addition_permit_needed?(project)

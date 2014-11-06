@@ -9,6 +9,8 @@ class Project < ActiveRecord::Base
   validates_presence_of :addition_size, :if => :only_if_screener_addition?
 
   def active_or_details?
+    # puts "&&&&&&& what is enter_details: #{status.to_s.include?('enter_details')} &&&&&&&"
+    # puts "&&&&&&&& status: #{status.to_s}"
     status.to_s.include?('enter_details') || status.to_s.include?('active')
   end
 
@@ -19,7 +21,9 @@ class Project < ActiveRecord::Base
   def create_needed_permits
 
     if GeneralRepairPermit.is_needed?(self)
+
       self.general_repair_permit ||= GeneralRepairPermit.new
+
       if GeneralRepairPermit.addition_permit_needed?(self)
         update_attributes(general_repair_permit_attributes: {addition: true})
       end

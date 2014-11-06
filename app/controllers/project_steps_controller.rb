@@ -29,7 +29,13 @@ class ProjectStepsController < ApplicationController
       params[:project] = {}
     end
     params[:project][:status] = step.to_s
-
+    if params[:project][:general_repair_permit_attributes]
+      params[:project][:general_repair_permit_attributes][:project_status_to_be_saved] = step.to_s
+    end
+    if params[:project][:historical_cert_appropriateness_attributes]
+      params[:project][:historical_cert_appropriateness_attributes][:project_status_to_be_saved] = step.to_s
+    end
+    
     @project.update_attributes(project_params)
     if @project.errors.any?
       render_wizard
